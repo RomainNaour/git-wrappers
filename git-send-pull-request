@@ -1,4 +1,6 @@
 #!/bin/bash
+# (C) 2012..2016, "Yann E. MORIN" <yann.morin.1998@free.fr>
+# License: at your option, either one of: GPLv2 or GPLv3
 #
 # Script to send a git pull-request, followed by the patches
 # in a threaded way:
@@ -20,9 +22,6 @@
 # Inspired by a script by Thomas PETAZZONI <thomas.petazzoni@free-electrons.com>
 # (expecially the git commands to use), but entirely written from scratch by
 # "Yann E. MORIN".
-#
-# (C) 2012, 2013, "Yann E. MORIN" <yann.morin.1998@free.fr>
-# License: at your option, either one of: GPLv2 or GPLv3
 
 set -E
 set -o pipefail
