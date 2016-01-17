@@ -1,0 +1,127 @@
+This is a collection of mostly assorted git helpers, aimed at easing
+the use of git when doing branches and working with Patchwork.
+
+You can set your PATH to point to the workign copy of this directory,
+and git will automatically pick up all those scripts and treat them as
+new git commands.
+
+================================================================================
+1) Easier branch work
+
+A new "model" of branching is introduced with those scripts:
+
+  - for every branch, a tag is created at the branch-point
+
+  - the tag is named after the branch (with a prefix to avoid
+    naming ambiguity)
+
+  - scripts in this repo that deal with branches expect (or set)
+    such tags
+
+
+Here are the scripts that will deal with such branches:
+
+    git-tag-and-branch BRANCH
+        create a branch BRANCH and the corresponding start-tag
+
+    git-branches
+        list all managed branches and the number of commits since
+        their start-tag in each of them, plus a total of all commits
+        on all such branches
+
+    git-blog
+        git-log such a branch, from its start-tag to its HEAD
+
+    git-rebase-and-retag NEW_START BRANCH
+        rebase the branch BRANCH ontop of NEW_START, recreating
+        the start-tag on NEW_START
+
+    git-empty-branch
+        report such branches with no commit between their start-tag
+        and HEAD
+
+    git-rm-branch BRANCH
+        delete the branch BRANCH and its start-tag
+
+
+================================================================================
+2) merge-branch
+
+A new concept introduced in addition to the new branmching model above,
+is the 'merge-branch'. A merge-branch is a branch on which there is a
+single commit, which is the merge of one or more other branches.
+
+A merge-branch is a branch with a start-tag, like above.
+
+    git-remerge-and-retag NEW_START BRANCH [additional branches]
+        remerge the branch BRANCh (and any additional branches) on top
+        of NEW_START, and tag NEW_START as the new start-tag of the
+        branch
+
+
+================================================================================
+3) bulk rebasing/remerging
+
+Busy devloppers may have a lot of local branches, that they may wish to
+rebase all on top of a common cset (i.e. to rebase after a new release
+was made, or to follow the maste rbranch aggressively...)
+
+    git-rebase-all NEW_STAR PATTERN
+        calls either git-rebase-and-retag or git-remerge-and-retag on
+        branches that match the regexp PATTERN.
+
+
+================================================================================
+4) Dealing with Patchwork
+
+Patchwork stores all patches received on a mailing lit, and makes them
+available from a WEB UI and via a JSON-formatted XML-RPC interface.
+
+    git-pwc
+        wrapper around pwclient, that will retrieve the list of patches,
+        and display a dialog-based UI to select patches to apply
+
+    git-pwv PATCH_ID
+        wrapper around pwclient, to view the patch with ID PATCH_ID
+        and display it in a format not unlike git-show.
+
+
+================================================================================
+5) Pull requests
+
+A lot of projects use pull-requests to ask the maintainer to pull in sets of
+changes. As well, a lot of projects prefer to have patches sent to a mailing
+list.
+
+    git-send-pull-request BASE REMOTE HEAD [options]
+        prepare a cover-letter with the content of git-request-pull, and
+        prepare the patches for BASE..HEAD. Open an editor to complete the
+        cover-letter. Send the cover-letter with all pathces as replies to
+        the cover-letter.
+
+        git-send-pull-request is quite versatile: it can instruct patchwork
+        to ignore the cover-letter and.or the patches, add recipients (To:,
+        Cc: or Bcc:), handles series versions, send patches or not, append
+        a suffix as in [PATCH vN/M SUFFIX]... Use '-h' to see help.
+
+
+================================================================================
+6) Misc
+
+    git-gc-all PATH
+        recursively scan PATH for all git trees, and run git-gc in each
+        of them
+
+    git-mk-archive CSET NAME COMP [OUT_DIR]
+        generate an archive with git-archive, extracting changeset CSET
+        with the prefix set to NAME-CSET/ and compressed with COMP (one
+        of gz, bz2, xz). If OUT_DIR is specified, the archive is stored
+        in OUT_DIT/NAME-CSET.tar.COMP; if OUT_DIR is not set, the
+        archive is sent to stdout.
+
+    git-out
+        equivalent of git-push -n
+
+    git-push-all
+        pushes all local branch to all remotes that have a push-url
+        not set to /dev/null
