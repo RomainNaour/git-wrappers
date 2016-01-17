@@ -1,7 +1,7 @@
 This is a collection of mostly assorted git helpers, aimed at easing
 the use of git when doing branches and working with Patchwork.
 
-You can set your PATH to point to the workign copy of this directory,
+You can set your PATH to point to the working copy of this directory,
 and git will automatically pick up all those scripts and treat them as
 new git commands.
 
