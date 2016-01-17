@@ -1,0 +1,13 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+main() {
+    local base
+
+    base="$( git describe --abbrev=0 )"
+
+    git log "${@}" "${base}"..
+}
+
+main "${@}"

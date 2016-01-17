@@ -1,0 +1,131 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+myname="${0##*/}"
+set -e
+
+#----------------------------------------------------------------------------
+do_error() {
+    local fmt="${1}"
+    shift
+
+    printf "%s: " "${myname}" >&2
+    printf "${fmt}" "${@}" >&2
+    exit 1
+}
+
+debug() { :; }
+if [ -n "${GIT_DEBUG}" ]; then
+    debug() {
+        local fmt="${1}"
+        shift
+
+        printf "%s: " "${myname}" >&2
+        printf "${fmt}" "${@}"  >&2
+    }
+fi
+
+help() {
+    cat <<-_EOF_
+		${myname} <new-base> <branch> [new-branch ...]
+
+		Remerge all branches merged in 'branch', optionally adding
+		all the 'new-branch', over 'new-base'.
+	_EOF_
+}
+
+#----------------------------------------------------------------------------
+main() {
+    local target="${1}"
+    local branch
+    local -a new_branches
+    local base
+    local git_dir="$( cd "$( git rev-parse --git-dir )"; pwd )"
+    local old_target old_branch old_log b
+    local -a branches
+
+    case "${target}" in
+        --help)
+            help
+            exit 0
+            ;;
+        --abort)
+            rm -f "${git_dir}/remerge"
+            git merge --abort 2>/dev/null || true
+            return
+            ;;
+        --*)
+            do_error "unknown option '%s'\n" "${target}"
+            ;;
+        *)
+            branch="${2}"
+            base="base/${branch}"
+            shift 2
+            new_branches=( "${@}" )
+            if [ -f "${git_dir}/remerge" ]; then
+                old_target="$( head -n 1 "${git_dir}/remerge" )"
+                old_branch="$( tail -n 1 "${git_dir}/remerge" )"
+                do_error "remerge already in progress for: '%s' <- '%s'\n"   \
+                         "${old_target}" "${old_branch}"
+            fi
+
+            if [ ${#} -lt 0 ]; then
+                do_error "usage: %s <new-base> <branch-name> [new-branch-to-merge ...]\n" "${myname}"
+            fi
+
+            debug "checking if target exists\n"
+            if ! git rev-parse --verify "${target}" >/dev/null 2>&1; then
+                do_error "unknown target '%s'\n" "${target}"
+            fi
+            for b in "${branch}" "${new_branches[@]}"; do
+                debug "checking if branch '%s' exists\n" "${b}"
+                if ! git rev-parse --verify "${b}" >/dev/null 2>&1; then
+                    do_error "unknown branch '%s'\n" "${branch}"
+                fi
+            done
+            debug "checking if base tag exists\n"
+            if ! git rev-parse --verify "${base}" >/dev/null 2>&1; then
+                do_error "unknown base tag '%s'\n" "${base}"
+            fi
+            debug "checking if '%s' is a merge branch\n" "${branch}"
+            old_log="$( git show --pretty='format:%s' "${branch}" )"
+            if [[ ! "${old_log}" =~ ^Merge\ branches ]]; then
+                do_error "'%s' is not a merge branch\n" "${branch}"
+            fi
+
+            debug "storing target and branch in stamp file\n"
+            printf "%s\n%s\n" "${target}" "${branch}" >"${git_dir}/remerge"
+            ;;
+    esac
+
+    branches=( $( git show --pretty='format:%s' "${branch}" \
+                  |sed -r -e 's/^Merge branch(es)? //'      \
+                          -e 's/ into .*$//'                \
+                          -e 's/(,| and) / /g'              \
+                          -e 's/\x27//g'                    \
+                )
+             )
+
+    for b in "${branches[@]}"; do
+        if git branch |grep -E "^..${b}" >/dev/null 2>&1; then
+            new_branches+=( "${b}" )
+        else
+            printf "%s: branch no longer exist\n" "${b}" >&2
+        fi
+    done
+
+    debug "remerging '%s' = { %s } onto '%s'\n" "${branch}" "${new_branches[*]}" "${target}"
+    # Delete branch first, so if we're on that branch, it will fail early
+    git branch -D "${branch}"
+    git tag -d "${base}"
+    git checkout "${target}"
+    git tag-and-branch "${branch}"
+    git merge --no-ff --no-squash --log --stat --no-edit --commit -q    \
+              "${new_branches[@]}"
+
+    debug "remove stamp file\n"
+    rm -f "${git_dir}/remerge"
+}
+
+#----------------------------------------------------------------------------
+main "${@}"

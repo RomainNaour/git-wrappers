@@ -1,0 +1,118 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+myname="${0##*/}"
+set -e
+
+#----------------------------------------------------------------------------
+do_error() {
+    local fmt="${1}"
+    shift
+
+    printf "%s: " "${myname}" >&2
+    printf "${fmt}" "${@}" >&2
+    exit 1
+}
+
+debug() { :; }
+if [ -n "${GIT_DEBUG}" ]; then
+    debug() {
+        local fmt="${1}"
+        shift
+
+        printf "%s: " "${myname}" >&2
+        printf "${fmt}" "${@}"  >&2
+    }
+fi
+
+help() {
+    :
+}
+
+#----------------------------------------------------------------------------
+main() {
+    local target="${1}"
+    local branch="${2}"
+    local base="base/${branch}"
+    local git_dir="$( cd "$( git rev-parse --git-dir )"; pwd )"
+    local msg
+    local old_target old_branch
+
+    case "${target}" in
+        --help)
+            help
+            exit 0
+            ;;
+        --abort)
+            rm -f "${git_dir}/rebase-and-retag"
+            git rebase --abort
+            return $?
+            ;;
+        --continue)
+            if [ ! -f "${git_dir}/rebase-and-retag" ]; then
+                do_error "no rebase in progress\n"
+            fi
+            target="$( head -n 1 "${git_dir}/rebase-and-retag" )"
+            branch="$( tail -n 1 "${git_dir}/rebase-and-retag" )"
+            base="base/${branch}"
+            git rebase --continue
+            ;;
+        --skip)
+            if [ ! -f "${git_dir}/rebase-and-retag" ]; then
+                do_error "no rebase in progress\n"
+            fi
+            target="$( head -n 1 "${git_dir}/rebase-and-retag" )"
+            branch="$( tail -n 1 "${git_dir}/rebase-and-retag" )"
+            base="base/${branch}"
+            git rebase --skip
+            ;;
+        --*)
+            do_error "unknown option '%s'\n" "${target}"
+            ;;
+        *)
+            if [ -f "${git_dir}/rebase-and-retag" ]; then
+                old_target="$( head -n 1 "${git_dir}/rebase-and-retag" )"
+                old_branch="$( tail -n 1 "${git_dir}/rebase-and-retag" )"
+                do_error "rebase already in progress for: '%s' <- '%s'\n"   \
+                         "${old_target}" "${old_branch}"
+            fi
+
+            if [ ${#} -ne 2 ]; then
+                do_error "usage: %s <new-base> <branch-name>\n" "${myname}"
+            fi
+
+            debug "checking if target exists\n"
+            if ! git rev-parse --verify "${target}" >/dev/null 2>&1; then
+                do_error "unknown target '%s'\n" "${target}"
+            fi
+            debug "checking if branch exists\n"
+            if ! git rev-parse --verify "${branch}" >/dev/null 2>&1; then
+                do_error "unknown branch '%s'\n" "${branch}"
+            fi
+            debug "checking if base tag exists\n"
+            if ! git rev-parse --verify "${base}" >/dev/null 2>&1; then
+                do_error "unknown base tag '%s'\n" "${base}"
+            fi
+
+            debug "storing target and branch in stamp file\n"
+            printf "%s\n%s\n" "${target}" "${branch}" >"${git_dir}/rebase-and-retag"
+
+            debug "rebasing '%s..%s' onto '%s'\n" "${base}" "${branch}" "${target}"
+            git rebase --onto "${target}" "${base}" "${branch}"
+            ;;
+    esac
+
+    debug "re-tagging base '%s' of '%s'\n" "${base}" "${branch}"
+    msg="$( printf 'Tag base for branch "%s"' "${branch}" )"
+
+    debug "Commit message: '%s'\n" "${msg}"
+    git checkout "${target}"
+    git tag -f -a -m "${msg}" "${base}"
+    git checkout "${branch}"
+
+    debug "remove stamp file\n"
+    rm -f "${git_dir}/rebase-and-retag"
+}
+
+#----------------------------------------------------------------------------
+main "$@"

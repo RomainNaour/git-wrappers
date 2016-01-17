@@ -1,0 +1,19 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+main() {
+    local range
+
+    range="$( LC_ALL=C git push -n "${@}" 2>&1                  \
+              |tail -n +2                                       \
+              |sed -r -e 's/^[[:space:]]*([^[:space:]]+).*/\1/' \
+            )"
+    if [ -n "${range}" ]; then
+        git --no-pager log --oneline --decorate "${range}"
+    else
+        printf "Everything up-to-date\n" >&2
+    fi
+}
+
+main "${@}"

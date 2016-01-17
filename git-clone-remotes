@@ -1,0 +1,51 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+set -e
+
+main() {
+    local repo origin origin_config
+
+    repo="$( git rev-parse --show-toplevel )"
+    if [ -z "${repo}" ]; then
+        printf "not in a repository\n" >&2
+        exit 1
+    fi
+
+    if [ -f "${repo}/.git/config" ]; then
+        origin="$( sed -r -e '/^[[:space:]]*url *= *(.+)$/!d; s//\1/;'  \
+                       "${repo}/.git/config"                            \
+                 )"
+    elif [ -f "${repo}/config" -a -f "${repo}/HEAD" ]; then
+        origin="$( sed -r -e '/^[[:space:]]*url *= *(.+)$/!d; s//\1/;'  \
+                       "${repo}/config"                                 \
+                 )"
+    fi
+
+    origin_remotes="${TMPDIR:-${TMP:-/tmp}}/git-clone-remotes.$$"
+    case "${origin}" in
+    /*)
+        (
+            cd "${origin}"
+            git remote
+        )
+    ;;
+    ssh://*)
+        no_proto="${origin#ssh://}"
+        server="${no_proto%%/*}"
+        ssh "${server}" "cd \"${prefix}\" && git remote"
+    ;;
+    esac |sed -r -e '/^origin$/d' >"${origin_remotes}"
+
+    for rem in $( cat "${origin_remotes}" ); do
+        printf '[remote "%s"]\n' "${rem}"
+        printf '\turl = %s\n' "${origin}"
+        printf '\tpushurl = /dev/null\n'
+        printf '\ttagopt = --tags\n'
+        printf '\tfetch = +refs/remotes/%s/*:refs/remotes/%s/*\n' "${rem}" "${rem}"
+    done >>".git/config"
+    rm -f "${origin_config}"
+    git pull --all
+}
+
+main "${@}"

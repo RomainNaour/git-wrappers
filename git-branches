@@ -1,0 +1,30 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+main() {
+    local -a branches
+    local b t nb n np
+
+    branches=( $( git branch \
+                  |sed -r -e 's/^..//' -e '/^\(detached from .*\)$/d'
+                )
+             )
+
+    n=0
+    np=0
+    for b in "${branches[@]}"; do
+        t="base/${b}"
+        git rev-parse "${t}" >/dev/null 2>&1 || continue
+        nb="$( git log --oneline ${t}..${b} |wc -l )"
+        printf "% 4d %s\n" ${nb} "${b}"
+        : $((n++))
+        np=$((np+nb))
+    done
+    if [ ${n} -ne 0 ]; then
+        printf "%s\n" "------------------------------------"
+    fi
+    printf "% 4d patch(es) on %d branch(es)\n" ${np} ${n}
+}
+
+main "${@}"

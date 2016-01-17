@@ -1,0 +1,33 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+usage() {
+    cat <<_EOF_
+Usage: ${0##*/} <cset> <prefix> <gz|bz2|xz> [out-dir]
+
+Generates a tarball of the specified cset.
+If out-dir is not specified, generate in CWD.
+_EOF_
+}
+
+if [ "${1}" = "-h" -o "${1}" = "--help" ]; then
+    usage
+    exit 0
+fi
+
+cset="${1}"
+prefix="${2}"
+case "${3}" in
+    gz)     comp="gzip -c -9 -" ; ext=.gz   ;;
+    bz2)    comp="bzip2 -c -9 -"; ext=.bz2  ;;
+    xz)     comp="xz -c -9 -"   ; ext=.xz   ;;
+    *)      exit 1                          ;;
+esac
+dir="${4}"
+
+git archive --format=tar                            \
+            --prefix="${prefix}-${cset}/"           \
+            "${cset}"                               \
+|${comp}                                            \
+>"$(cd "${dir:-.}"; pwd)/${prefix}-${cset}.tar${ext}"

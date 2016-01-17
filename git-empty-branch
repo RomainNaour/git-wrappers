@@ -1,0 +1,37 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+main() {
+    local -a args=( "${@}" )
+    local -a branches
+    local b cb nb_cset
+    local delete
+
+    delete=0
+    while getopts 'd' OPT "${args[@]}"; do
+        case "${OPT}" in
+            d)  delete=1;;
+            *)  exit 1;;
+        esac
+    done
+
+    cb="$( git branch |sed -r -e '/^\* (.*)$/!d; s//\1/' )"
+    branches=( $( git branch |sed -r -e 's/^..//; /^master$/d;' ) )
+
+    for b in "${branches[@]}"; do
+        nb_cset="$( git log --oneline "master..${b}" 2>/dev/null |wc -l )"
+        [ ${nb_cset} -eq 0 ] || continue
+        if [ ${delete} -eq 0 ]; then
+            printf "%s\n" "${b}"
+        else
+            if [ "${b}" = "${cb}" ]; then
+                printf "Can not delete current branch %s\n" "${b}"
+                continue
+            fi
+            git rm-branch "${b}"
+        fi
+    done
+}
+
+main "${@}"

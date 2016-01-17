@@ -1,0 +1,122 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+LOCK_DOMAIN="update-me"
+
+myname="${0##*/}"
+
+#-----------------------------------------------------------------------------
+main() {
+    local base_dir="${1}"
+    local before after delta
+    shift
+
+    if [ -z "${base_dir}" ]; then
+        printf "%s: no directory specified\n" "${myname}" >&2
+        exit 1
+    fi
+
+    before=$( du -s "${base_dir}" |awk '{ print $1 }' )
+
+    find "${base_dir}" -type d -name .git -prune -o -type f -name HEAD  \
+    |sed -r -e 's:/[^/]*$::'                                            \
+    |sort                                                               \
+    |while read dir; do
+        do_git_gc "${dir}" "${@}"
+    done
+
+    after=$( du -s "${base_dir}" |awk '{ print $1 }' )
+    delta=$(((before-after)/1024))
+    before=$((before/1024)); after=$((after/1024))
+    printf "Total gained: %d MiB (%dMiB -> %dMiB)\n" ${delta} ${before} ${after}
+}
+
+#-----------------------------------------------------------------------------
+do_git_gc() {
+    local dir="$( cd "${1}"; pwd )"
+    local old_size new_size
+    local delta msg
+    shift
+
+    if ! do_lock "${LOCK_DOMAIN}" "${dir}" 5; then
+        return 0
+    fi
+    _pushd "${dir}"
+
+    printf "%s: running git gc\n" "${dir}"
+
+    old_size=$( _du )
+    nice -n 19 git gc "${@}"
+    new_size=$( _du )
+
+    if [ ${new_size} -le ${old_size} ]; then
+        delta=$((old_size-new_size))
+        msg="gained"
+    else
+        delta=$((new_size-old_size))
+        msg="lost"
+    fi
+
+    _popd
+    do_unlock "${LOCK_DOMAIN}" "${dir}"
+
+    delta=$((delta/1024))
+    printf "%s: %d MiB %s\n\n" "${dir}" ${delta} "${msg}"
+}
+
+#-----------------------------------------------------------------------------
+_du() {
+    if [ -d .git ]; then
+        du -s .git
+    else
+        du -s .
+    fi |awk '{ print $1; }'
+}
+
+#-----------------------------------------------------------------------------
+_pushd() {
+    local dir="${1}"
+    pushd "${dir}" >/dev/null
+}
+_popd() {
+    popd >/dev/null
+}
+
+#-----------------------------------------------------------------------------
+do_lock_file() {
+    local domain="${1}"
+    local what="${2}"
+    local hash
+
+    hash="$( printf "%s\n" "${what}" |sha1sum |cut -d' ' -f1 )"
+
+    printf "%s/%s.%s" "${TMP:-${TMPDIR:-/tmp}}" \
+                      "${domain}"               \
+                      "${hash}"
+}
+do_lock() {
+    local domain="${1}"
+    local what="${2}"
+    local delay="${3:-0}"
+    local lock_file="$( do_lock_file "${domain}" "${what}" )"
+
+    if ln -s "${what}" "${lock_file}" >/dev/null 2>&1; then
+        return 0
+    fi
+    sleep ${delay}
+    if ln -s "${what}" "${lock_file}" >/dev/null 2>&1; then
+        return 0
+    fi
+    return 1
+}
+do_unlock() {
+    local domain="${1}"
+    local what="${2}"
+    local lock_file="$( do_lock_file "${domain}" "${what}" )"
+
+    rm -f "${lock_file}" >/dev/null 2>&1
+}
+
+#-----------------------------------------------------------------------------
+main "${@}"

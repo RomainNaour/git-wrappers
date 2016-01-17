@@ -1,0 +1,28 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+myname="${0##*/}"
+set -e
+
+#----------------------------------------------------------------------------
+main() {
+    local branch="${1}"
+    local tag="base/${branch}"
+    local -a remotes
+    local r
+
+    git branch -D "${branch}"
+    git tag -d "${tag}" || true
+    remotes=( $( git remote -v \
+                 |awk '$(NF)=="(push)" && $(2)!="/dev/null" {print $(1);}'
+               )
+            )
+    for r in "${remotes[@]}"; do
+        if git ls-remote --exit-code "${r}" "${branch}" >/dev/null 2>&1; then
+            git push "${r}" ":${branch}"
+        fi
+    done
+}
+
+#----------------------------------------------------------------------------
+main "$@"

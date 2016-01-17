@@ -1,0 +1,51 @@
+#!/bin/sh
+
+mail_to_commit() {
+    gawk '
+BEGIN {
+    in_header = 1;
+    in_body = 0;
+    in_patch = 0;
+}
+
+in_header==1 && $(0)=="" {
+    printf( "commit %s\n", cset );
+    printf( "Author:\t%s\n", author );
+    printf( "Date:\t%s\n", date );
+    printf( "\n" );
+    in_header = 0;
+    in_body = 1;
+    next;
+}
+
+in_header==1 && $(1)=="From:" {
+    author = substr( $(0), 7 );
+}
+
+in_header==1 && $(1)=="Date:" {
+    date = substr( $(0), 7 );
+}
+
+in_header==1 && $(1)=="Message-Id:" {
+    cset = substr( $(0), 14, 40 );
+}
+
+in_body==1 && $(0)=="---" {
+    in_body = 0;
+    in_patch = 1;
+    printf( "\n" );
+    next;
+}
+
+in_body==1 {
+    printf( "    " );
+    print;
+}
+
+in_patch==1 {
+    print;
+}
+'
+}
+
+pwclient view "${1}" |mail_to_commit |colordiff

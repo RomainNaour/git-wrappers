@@ -1,0 +1,58 @@
+#!/bin/bash
+# (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
+# License: GPLv2, see: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+myname="${0##*/}"
+set -e
+
+#----------------------------------------------------------------------------
+do_error() {
+    local fmt="${1}"
+    shift
+
+    printf "%s: " "${myname}" >&2
+    printf "${fmt}" "${@}" >&2
+    exit 1
+}
+
+debug() { :; }
+if [ -n "${GIT_DEBUG}" ]; then
+    debug() {
+        local fmt="${1}"
+        shift
+
+        printf "%s: " "${myname}" >&2
+        printf "${fmt}" "${@}"  >&2
+    }
+fi
+
+#----------------------------------------------------------------------------
+main() {
+    local branch="${1}"
+    local base="base/${branch}"
+    local git_dir="$( cd "$( git rev-parse --git-dir )"; pwd )"
+
+    case "${target}" in
+        --*)
+            do_error "unknown option '%s'\n" "${target}"
+            ;;
+        *)
+            debug "checking if branch already exists\n"
+            if git rev-parse --verify "${branch}" >/dev/null 2>&1; then
+                do_error "branch '%s' already exists\n" "${branch}"
+            fi
+            debug "checking if tag already exists\n"
+            if git rev-parse --verify "${base}" >/dev/null 2>&1; then
+                do_error "base tag '%s' already exists\n" "${base}"
+            fi
+            ;;
+    esac
+
+    debug "creating tag '%s'\n" "${base}"
+    git tag -m "Tag for base of branch '${branch}'" "${base}"
+
+    debug "creating branch '%s'\n" "${branch}"
+    git checkout -b "${branch}" "${base}"
+}
+
+#----------------------------------------------------------------------------
+main "$@"
