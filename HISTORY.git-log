@@ -1,0 +1,1025 @@
+commit e9da1eb6e547eceaec2079fdf657ad633d868cc0
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jan 17 12:25:49 2016 +0100
+
+    bin/git-*: move git wrappers to their own repository
+    
+    Having the git wrappers in their own repository will make it easier to
+    share them without sharing my whole home directory... ;-)
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 4fa6f618d325465c69cc159d11451c759b0474de
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jan 17 12:12:34 2016 +0100
+
+    bin/git-pwv: add git wrapper around pwclient-view
+    
+    This wrapper fetches a patch and display it like git-show.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit cb255ce2a9f26c7467ac91078063a968002ea89b
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jan 17 11:31:16 2016 +0100
+
+    bin/git-pwc: accept the 'All' state
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 119faa8e6c6f574be9b8b4a60449f5b8a8300439
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Jan 9 22:13:48 2016 +0100
+
+    bin/git-send-pull-request: add option to be ignored by patchwork
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6a75fa8c00810fe41196984cbc9590109ec1defd
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Jan 9 22:05:45 2016 +0100
+
+    bin/git-send-pull-request: support a --dry-run
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit e2313a34b793c52dce3bb89cb2bcce03b6b9b7c4
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Jan 9 22:06:36 2016 +0100
+
+    bin/git-pwc: ignore case in search pattern
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit aa35ccb176abde35a1901571e1b6f357f76b90e5
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Fri Dec 25 20:03:47 2015 +0100
+
+    bin/git-pwc: accept state as argument
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 7d614b9e08ceaa60704382e6ce1f5113adc8261f
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Dec 13 19:57:19 2015 +0100
+
+    bin/git-gc-all: also gc bare clones
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit c57b1392c52fd957471ee37c2533ec12683113f2
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Nov 1 12:28:57 2015 +0100
+
+    bin/git-gc-all: pass extra args to individual git-gc
+    
+    Allows running git-gc with, e.g., --aggressive.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 1afcd4e407f0cc1aea72c514dd5060cd2bc0b752
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Thu Aug 13 14:19:34 2015 +0200
+
+    git/branches: don't fail on "other" branches
+    
+    Currnetly, 'master' is special-cased and excluded, because it is not one
+    of my working branches.
+    
+    However, I may have other local branches that are not mines, like
+    'next', which is thus to be excluded.
+    
+    Rather than have a list of exclusion, consider only branches which have
+    a corresponding base-tag, which is the indication of a local working
+    personal branch.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit dda196f6d56cd477a557f2e41b25c9dce9b1a71f
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Mon Aug 3 19:37:52 2015 +0200
+
+    bin/git-branches: do not try to track detached heads
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 29843c2771ba6f4e00c2a48dc8e35b6af9d46c5e
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Mon Aug 3 19:31:11 2015 +0200
+
+    bin/git-pwc: allow searching with keywords
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6ff55be7f00ecb9048f93c16e0c24405f93bdf37
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jul 5 21:51:15 2015 +0200
+
+    bin/git-pwc: eye-candy
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 164adba14e0db6bafe23eb2840c12c64c993e38d
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Wed Jul 1 20:01:04 2015 +0200
+
+    bin/git-branches: don't print separator if no branch
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit fb024675db66a071012d3ad2aeab138aaf253dd7
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Wed Jul 1 00:54:26 2015 +0200
+
+    bin/git-pwc: change cancel label
+    
+    We don't treat it as "cancel" but as "quit".
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 239cd83ed64a0cee5d8a52d13e44145da1f60c44
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Jun 30 23:48:15 2015 +0200
+
+    bin/git-rm-branch: fix typo
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 0200580ea8a5ae936e73d5575d5d32cc513668f2
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jun 28 17:09:04 2015 +0200
+
+    bin/git-pwc: display the number of patches in the secondary title
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit fa7419260b319e4e594257ed43b18ef6330b1d4d
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jun 28 17:06:32 2015 +0200
+
+    bin/it-empty-branch: use git-rm-branch when removing empty branches
+    
+    No need to duplicate the same logic in two places...
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6a71f18463d1b4a2b7a489265cd5a0c6b8801752
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jun 28 17:05:04 2015 +0200
+
+    bin/git-rm-branch: don't remove branches missing upstream
+    
+    When a branch does not exist in the remote, do not push-to-delete, to
+    avoid an error message.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 02dd987aae5787005e7c9ae7146957929f6c72c0
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Jun 27 18:41:41 2015 +0200
+
+    bin/git-pwc: an advanced Patchwork client integrated in git
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit d329f168e83d23e16e6db0cfe17cfdb8d5cb8928
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Jun 20 17:31:26 2015 +0200
+
+    bin: add Copyright and licensing info to all git scripts
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 14a03319914874873be57abe9f04414946a3b6ef
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Jun 14 12:06:47 2015 +0200
+
+    bin/git-branches: print number of patches and branches
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit b6f7f00c8452bb71ae5f56fa9dfa9b8a93fd37bd
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun May 10 11:46:20 2015 +0200
+
+    bin/git-branhes: display local branches with count of changes
+    
+    For each local branch, display the number of commits on that branch.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 7765c606eab522dec9fb86e5675d3d21909580e1
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Thu Apr 16 23:42:18 2015 +0200
+
+    bin/git-gc-all: also print size before/after along with the delta
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 4d82cd119b7c49349bfa40ea358c99049673a70a
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 19:39:29 2015 +0200
+
+    bin/git-send-pull-request: fix typo
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 364243848022193cc7a60753de907c05e9754158
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 19:34:16 2015 +0200
+
+    bin/git-rm-branch: also push deleted branch
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 8ab6f65dedd8f0cf8ce8843d508f3c30f54b6854
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 15:34:22 2015 +0200
+
+    bin/git-clone-remotes: support cloning from bare repo
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 5fe62d89052bbd15ba4077099c70d7c5fd4bce6a
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 15:32:23 2015 +0200
+
+    bin/git-send-pull-request: set ft=mail
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit f4e5bfb419580e638ef46e601c33225d8f4d89c1
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 15:31:41 2015 +0200
+
+    bin/git-push-all: push all branches in a single push
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 848e58505752d1884810f739af8a86fb607ab3ac
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 15:30:32 2015 +0200
+
+    bin/git-empty-branch: also push the deleted branch
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 207b6ef6269b8a427997149149059b9b8351b7e2
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 15:24:06 2015 +0200
+
+    bin/git-rm-branch: add helper to remove (and push) a branch and tag
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit f298950790718d6293adabbb1b7c9960c466a0ce
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Mar 31 15:23:29 2015 +0200
+
+    bin/git-blog: git wrapper to log the current branch
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 84610941ea3a16b9d8ca4e26a2b7e820a4680ac7
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Mon Feb 16 19:51:21 2015 +0100
+
+    bin/git-gc-all: nice the gc process
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 8d11e0787f1486bf768d90343fda331de5c57bfa
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Jan 27 00:48:09 2015 +0100
+
+    bin/git-out: new git helper to print outgoing changesets
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit dba93f2772734c5d604928152153870ce76d3c60
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sat Jan 3 14:24:44 2015 +0100
+
+    bin/git-rebase-and-retag: add skeleton help
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit af72c98e3f0f6398cadea4b2be1680dcbea83f88
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Wed Oct 22 00:00:30 2014 +0200
+
+    bin/git-push-all: add git helper to push to all writable remotes
+    
+    Push all local branches to writable remotes (remotes that have a push
+    URL).
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit a3fad019bb9ec9229dc59e4bb78f29242b68d6e3
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Tue Oct 21 23:56:45 2014 +0200
+
+    bin/git-remerge-and-retag: many improvements:
+    
+      - add help text
+      - check branch isa merge branch
+      - check existence of new branches
+      - really add new branches
+      - forget about now-missing branches
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 67a500a2ef2a4187cd3419b65ec56e8451433278
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Sep 21 00:26:17 2014 +0200
+
+    bin/git-remerge-and-retag: allow merging more branches
+    
+    When re-merging, allow specifying more branches to merge.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit d35000b30fca567644a4143160ddd1b1ccb1c29b
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Sun Sep 21 00:24:47 2014 +0200
+
+    bin/git-empty-branch: display branches with no commits
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit fdf7894fb65661d3fff772340f244241aa1baded
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Thu Jul 3 22:11:09 2014 +0200
+
+    git-send-pull-request: also set the series version in patches subjects
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 71af7e5c28729ce6ca9805800bebb25eec955ad2
+Author: Yann E. MORIN <yann.morin.1998@free.fr>
+Date:   Mon Jun 30 00:13:16 2014 +0200
+
+    bin/git-new-workdir: add symlink to contrib'ed git helper
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit cf0e96d6b1ab95592839eea818c6cfcfe9b0c321
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Jun 28 22:14:56 2014 +0200
+
+    git-send-pull-request: add a bit of debug for remotes
+    
+    Add a debug line to show what URL a remote resolves to.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 4891dacf5ccdd93031302027ecd130946bf1a282
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Jun 28 00:14:28 2014 +0200
+
+    bin/git-gc-all: add missing comma in legalese
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit c948ac33d3f01b8983ff0a4bb1e0ca34b84db550
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Jun 18 22:29:10 2014 +0200
+
+    get-send-pull-request: add option to specify tag suffix
+    
+    A tag suffix is an additional field in the part of the subject between [].
+    E.g.:  [PATCH N/M RFC]  where 'RFC' is the tag-suffix added with this
+    new option.
+    
+    Update the bash_completion accordingly.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 335904dd19d306bcba5a47e7e97c559bb483d4c4
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sun Jun 1 23:36:46 2014 +0200
+
+    bin/git-send-pull-request: add arg to set a subject suffix
+    
+    ... to add a suffix in the [] part of the subject.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 06fd37f87ff59d84cbc68437a7497ecaeb69c0bd
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sun May 25 12:51:32 2014 +0200
+
+    git/rebase-all: use the new remerge-and-retag wrapper
+    
+    And simplify the code at the same time.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 2ea26df789168acfbbde2857f0bda64d91840d85
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sun May 25 12:50:55 2014 +0200
+
+    git: add merge wrapper
+    
+    Add a new wrapper remerge-and-retag, that does to merge what
+    rebase-and-retag does to rebase.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 8df893b8c60f121f9c53b3eb7ad81cd374057461
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Apr 5 01:25:44 2014 +0200
+
+    git-rebase-all: allow re-merging merge-branches
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 5c07a50a8a06c9cea6d8989f7870a9b79ecbec3e
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Apr 1 19:01:41 2014 +0200
+
+    git-rebase-all: store branches in a variable
+    
+    Soon, we'll be able to re-create merge-branches.
+    
+    To avoid rescanning the branches again, just store them
+    in a variable for later use.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 457c9868705d3e0009afc81e3242f411e7f1c3c3
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Apr 1 18:55:26 2014 +0200
+
+    git-rebase-all: add trace function, don't rebase merge-branches
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 8073b39536b68fefccad61a3ccaddab558293346
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Mar 29 22:51:16 2014 +0100
+
+    bin/git-all: add licensing info
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit f6e54e3a77a02e7d157676a3b7711fcbeff33a45
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Mar 29 22:45:11 2014 +0100
+
+    bin/git-rebase-all: new git helper to rebasle all branches
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit c2fd4b413df93dd77249eacec765401ddf4e4ba6
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Mar 8 18:56:39 2014 +0100
+
+    git-send-pull-request: patchwork ignore mails with 'X-Patchwork-Hint: ignore'
+    
+    Instead of trying to munge the pull-request message itself, just tell
+    Patchwork not to process the cover-letter, using a mail header available
+    just for this purpose:
+        X-Patchwork-Hint: ignore
+    
+    Also, always name the branch in the cover-letter subject, even for non
+    pull-requests.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 0deeedf31c98c62b89e195c6a100e10b7587b206
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Mar 5 19:39:48 2014 +0100
+
+    git-send-ull-request: add --pull potion to force a pull-request
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit d71071ff49f7cb83f7131c472c604e28293b1766
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Mar 1 18:35:44 2014 +0100
+
+    git-send-pull-request: sleep between sending the cover-letter and the patches
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit ba2b1e2ed968cfcb9fdb663f5d52475b3c44125e
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Feb 11 22:04:58 2014 +0100
+
+    git-clone-remotes: do not automatically gitpull remotes
+    
+    Just add the remote's remotes as local remotes.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 07d2c588a839b07507799c379b973e7b81aafdf5
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Jan 11 19:14:44 2014 +0100
+
+    git-send-pull-request: dump the send-enail commands in debug mode
+    
+    It helps debug why a send-email command would fail.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 115d46ab8395106c19d35a54c34bedb68011b4bc
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Jan 7 23:35:21 2014 +0100
+
+    git-send-pull-request: don't forcibly add a \n after ${fmt}
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 64d52b7606b86664a65bcbef875d9c79f60bb680
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Fri Jan 3 18:47:51 2014 +0100
+
+    git-send-pull-request: add option to specify the subject of the cover-letter
+    
+    With --not-pull, the subject was to be filled in the editor, which can be
+    very easily forgotten.
+    
+    Instead, accept a command line argument to specify the subject. If --not-pull
+    and the subject was not specified on the command line, prompt for it.
+    
+    It can also be used to override the subject for a pull request (ie. without
+    --not-pull).
+    
+    Add to completion as well.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit ec0d177c1c7fcef6c5cfe9177125af4b91429a7a
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Dec 28 18:44:17 2013 +0100
+
+    git-send-pull-request: add ability to make it appear not as a pull-request
+    
+    Some projects (eg. Buildroot) do not use pull-requests, and use PAtchwork
+    to track the pending patches.
+    
+    But Patchwork deals with pull-requests cover-letters, and shows them in
+    the list of pending patches. This means that those pull-requests have
+    to be manually marked as 'Not Applicable' every time, and is a PITA.
+    
+    Add an option to git-send-pull-request to make it not appear to be a
+    pull request. Yes, it defeats its name, but t is useful to have a single
+    script that handles both cases.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit a5a44dbc71695d87c5434f83076c3622406dcbbb
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Dec 26 19:28:27 2013 +0100
+
+    git-gc-all: fix calculation of total gained space, don't exclude any repo
+    
+    The calculations of total gained space was borked because we used the
+    human-readable output of du. Also, du returns KiB-sized blocks, so we
+    only need to divide by 1024 to get MiBs, not 1048576.
+    
+    Now we only do a standard git gc, there's no need to exclude any repository.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 2f546d4eb0d079871cfa5d9e43cf43078c7d6a0c
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Fri Dec 20 23:35:28 2013 +0100
+
+    git-gc-all: don't be aggressive
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 14ab0f1057455e4945e1fe2694316e73c735f3cf
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Oct 31 00:02:59 2013 +0100
+
+    git-send-pull-request: ask password only once
+    
+    Since we send the cover letter separately from the patches batch,
+    'git send-email' will ask for the password twice, which is a bit
+    inconvenient in two ways:
+      - people are lazy, and don't want to type their passwords twice,
+      - in case the second password is mis-typed, only the cover letter
+        is sent
+    
+    By asking for the password before-hand, we ensure that if the password
+    is wrong, then sending the cover letter will fail, *and* the patches
+    will not be sent either.
+    
+    The drawback to this is that the password appears in 'ps'.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+    
+    ---
+    Since the password appears in clear in 'ps', it can be a risk on a
+    multi-user system.
+    
+    To work this around, we could provide our own $GIT_ASKPASS that would
+    feed the password from its stdout directly to git's stdin, thus never
+    exposing the password.
+    
+    But that's a bit too involved...
+
+commit 254ddc5c0cfb3a41217b35c02c3e5f6196de331e
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Oct 15 22:57:09 2013 +0200
+
+    git-send-pull-request: allow specifying to/cc/bcc only for cover letter
+    
+    Allow one to specify the to/cc/bcc fields for the cover-eltter only, not
+    for the individual patches.
+    
+    This allows, for example, to Cc specific decipients on the cover-letter
+    and their own individual patch(es) without having them receive the full
+    series.
+    
+    Also, allow one to Cc all patch contributors on the cover-letter, not
+    on individual patch(es) they are not contributors.
+    
+    Update auto-completion accordingly.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 831d0d1a93aa35c05871cae79061af89d247fb4a
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sun Oct 13 00:15:14 2013 +0200
+
+    git-tag-and-branch: create a tag object, not just a tag reference
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 0a1b0cf22401e4f46650af6d69cb4edc162a4ef2
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sun Sep 22 14:13:29 2013 +0200
+
+    git-clone-remotes: don't do the initial clone
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit fc34aceed66ad50e854eda11fec2e6d144e85f2b
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Sep 12 11:34:28 2013 +0200
+
+    bin/git-mk-archive: easily prepare an archive from a cset
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 9c93abbaa2daec9c9a99a2f746fe402a92b4ce9d
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Mon Sep 2 20:06:50 2013 +0200
+
+    git: base tags start with 'base/' for tag-and-branch and rebase-and-retag
+    
+    This is a renaming for rebase-an-retag to be more generic, and not
+    specific to me.
+    
+    Impacts both tag-and-branch and rebase-and-retag
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 61d2ea50b4f2d4201c4ba7846dc33181a0891d68
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Jun 29 17:17:52 2013 +0200
+
+    git-send-pull-request: detect unmodified cover-letter
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 775411432adf03ca6e4884405f91adab4dcb2aa8
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Jun 29 16:15:42 2013 +0200
+
+    git-send-email: add space before signature, add period after user name
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 41094cc944d8205d23fd9b0a4c2725c9dece2347
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Jun 29 12:30:24 2013 +0200
+
+    git-send-pull-request: do not remove temp files on failure
+    
+    It happens relatively often that I mis-type the password for
+    my email account. If I wrote a long, complex intro to the
+    pull-request, I don't want to loose it in this case.
+    
+    So, do not remove temp files on failure, so it is posible to
+    retrieve the intro message. Leave it to the user to cleanup
+    afterward. Besides, the temp files are created in a tmpfs, so
+    they'll get removed on next reboot anyway.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 803397c54c5a4db99b8b542eda21982632dd8bb5
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Fri Jun 14 08:30:24 2013 +0200
+
+    bin/git-tag-and-branch: new helper script
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 2be0d3251b6ae1cccc0d96addb6c69d77190033a
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue May 14 23:51:43 2013 +0200
+
+    git-send-pull-request: move 'Regards' lines up the stack
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 3c88ff3001f358fa548fc875fcd2dc2849aaad16
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat May 11 21:58:00 2013 +0200
+
+    git-send-pull-request: use a template when creating a temp dir
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit ec5d32942ccf90bf1a69c1abef181148cbf5ebe1
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat May 11 19:05:01 2013 +0200
+
+    git-send-pull-request: allow --series as well
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 36f97710634e2c565be8eb6ac1f7c899b43246b6
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat May 11 19:01:28 2013 +0200
+
+    git-send-pull-request: add boiler-plate and license
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit c9f208271b7bbe987efc40c527fcfd726e8690cb
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Apr 30 00:39:31 2013 +0200
+
+    git-send-pull-request: my signature does not have the separator
+    
+    Since I switched to using mutt, my signature no longer has the
+    signature-separator, so we have to add it.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit dc368b2d2116ffa2c85badd1af4781060a5df2f4
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Mon Apr 1 12:57:12 2013 +0200
+
+    git-rebase-and-retag: properly restore status
+    
+    In case of --continue or --skip, properly restore the
+    base and branch names, so the tag is later succesful.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 744745bdcde1bcf30acb707d139830508a3e5deb
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Mar 27 17:50:00 2013 +0100
+
+    git-rebase-and-retag: allow --continue, --skip and --abort
+    
+    Make it a bit more like real rebase.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 160862e0702bf98a1b7048880e2a4d24111335b5
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Fri Mar 22 14:21:35 2013 +0100
+
+    git-send-pull-request: do not remove patches temp dir on failure
+    
+    In case of failure during the git-send-email, do not remove the temporary
+    patches directory, as it can be a large annoyance to lose carefully written
+    intro message in such a case.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 233aa9084b0c241994b7208abf1f22ef651174c0
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Mon Mar 18 23:09:05 2013 +0100
+
+    git-rebase-and-retag: check number of arguments
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6188b6be9aa852c493291f8747a7dd471eb7fe02
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Fri Mar 15 22:46:20 2013 +0100
+
+    git-rebase-and-retag: check base tag exists
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6b2fdcd641727fcd6301e657ce7d11683c7a2abe
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Mar 12 19:40:46 2013 +0100
+
+    git-rebase-and-retag: enhance git-retag
+    
+    Enhance git-retag to do a rebase and a retag, all in
+    one operation (from the user's point-of-view).
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 3b95d50cbdc05c649e1ae8b32b5871b5d7ec9308
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Mar 5 23:10:54 2013 +0100
+
+    git-clone-remotes: handle newer gits
+    
+    Newer gits put single-quotes arounf the directory the repository is
+    being cloned to, so we need to strip these single quotes.
+    
+    Add come syntax-hightlighting sugar, too.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 611ae4185268c6cdd314fcb31697cb1175f1efbf
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Feb 27 19:03:48 2013 +0100
+
+    bin/git-gc-all: fix printf format, fix size reporting
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 4c29452b323780ea03193c3b473db94b23ab1709
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Feb 27 18:50:52 2013 +0100
+
+    bin/git-gc-all: add script to run 'git gc' on al git directories
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit a2d57153eea94071e2e111817dead931c21eaa73
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Feb 5 16:04:31 2013 +0100
+
+    git-send-pull-request: handle --help early, check for --compose
+    
+    We need to check for --help early, before we even try to check if we
+    have enough args (and even before we even try to parse them).
+    
+    Also., --compose is not compatible (as it is mandatory), so check for
+    it, and bail out if present.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit f3f79e416ee8358f6aeafd133f2eee88387b1aa6
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Jan 3 22:31:00 2013 +0100
+
+    git-send-pull-request: add --version to usage help text
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 1e1db958c29f01d33f5b06f030562bceac1ecb6f
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Jan 3 22:27:18 2013 +0100
+
+    git-send-pull-request: do not silently failed on missing args
+    
+    ... but correctly print the usage info.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit c5073aea3f89c530d0a122cee0a85e3180ee1297
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Jan 1 21:33:04 2013 +0100
+
+    git-send-pull-request: also prepare the 'Changes vX -> vY' section
+    
+    If a series version if specified, also prepare the 'Changes' section.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit e53606629bf0d49cf6b6bbef262e4abd0ad58ff2
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Jan 1 21:24:43 2013 +0100
+
+    git-send-pull-request: add arg to set SPR version
+    
+    With --version=X, include 'v=X' in the cover-letter's subject.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 80091f28939a1a1ed9d54ee7b55fe8998d5cac7a
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Sat Dec 29 00:17:08 2012 +0100
+
+    git-send-pull-request: print proper error message on incorrect 'start'
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit d6da756a579f13a97b2df24777e75cbbad9ba015
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Dec 26 01:40:49 2012 +0100
+
+    git-send-pull-request: don't accept end=='master'; enhance debug messages
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 425f5463a0898c7de37ec2c1a048a0e41df932a7
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Dec 26 01:20:56 2012 +0100
+
+    git-send-pull-request: remove superfluous \n in debug message
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit fcd2c255a6384c8deb3dbfffdb3f5a7f8f554388
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Dec 26 01:20:14 2012 +0100
+
+    git-send-pull-request: change the way debug() is declared
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 47ffb8aec2538d7f44d39af9d4ed2b02f5523d66
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Wed Dec 26 01:15:58 2012 +0100
+
+    git-send-pull-request: add option to send only the cover-letter
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 488c404a23f092ad83656846f0c13ef9129fa5db
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Dec 20 23:23:05 2012 +0100
+
+    git-send-pull-request: better sanitise arguments
+    
+    Better sanitise arguments that are passed to send-pull-request:
+      - check we have enough args for send-email
+      - detect and allow three-argument calls to request-pull
+      - detect and allow naming a repository by remote name
+      - better check remote repo and branch existence
+    
+    Add a debug-log.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit b6eb76e464d1e0df51139cf335ee9d3b949a8784
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Dec 13 22:37:26 2012 +0100
+
+    git-send-pull-request: abort on empty cover-letter
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 06508b3f455dcda84ef7cd848438986e5ce2df1f
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Dec 13 21:28:59 2012 +0100
+
+    git-send-pull-request: fix appending the signature
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 8bbcfd61cb6b384d7674c4dda92d310e13170a8e
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Dec 13 00:39:06 2012 +0100
+
+    git-send-pull-request: automatically send a combined series + pull-request
+    
+    Based on a script by Thomas PETAZZONI, provide a new command for git,
+    that will:
+      - prepare the patches to send
+      - prepare an introductory message
+      - include the output of 'git request-pull'
+      - edit the intro message
+      - send the whole
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6ae79ea3042e5b14d6540ff936b837e67c9a53aa
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Thu Dec 6 22:30:14 2012 +0100
+
+    git-clone-remotes: print cloned remotes
+    
+    When cloning with remotes, print the list of added cloned remotes.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 6e091553db458f5b3b0dc69d5e144019a8fc37b3
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Nov 27 19:31:33 2012 +0100
+
+    git-clone-remotes: allow cloning from ssh repositories
+    
+    If the to-be-cloned repository is on an ssh-with-login server,
+    then we can clone with remotes, too.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>
+
+commit 3c9d2d177aa9e0e308d523088a95c606639bad84
+Author: Yann E. MORIN" <yann.morin.1998@free.fr>
+Date:   Tue Nov 27 19:29:57 2012 +0100
+
+    git-clone-remotes: no need for an alias
+    
+    If the script name start with 'git-', and is in the PATH, then
+    there is no need for an alias.
+    
+    Signed-off-by: "Yann E. MORIN" <yann.morin.1998@free.fr>

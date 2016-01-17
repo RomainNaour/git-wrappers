@@ -1,6 +1,7 @@
 #!/bin/bash
 # (C) 2014, Yann E. MORIN <yann.morin.1998@free.fr>
-# License: GPLv2, see LICENSE.GPLv2 in this repository
+# License: at your option, either one of: GPLv2 or GPLv3,
+# see LICENSE.GPLv2 and LICENSE.GPLv3 in this repository
 
 usage() {
     cat <<_EOF_
