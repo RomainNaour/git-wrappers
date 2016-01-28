@@ -367,7 +367,7 @@ fi
         printf "pull request"
     else
         nb_patches=$( git log --oneline "${start}..${end}" |wc -l )
-        printf "PATCH 0/%d" ${nb_patches}
+        printf "PATCH %0*d/%d" ${#nb_patches} 0 ${nb_patches}
     fi
     if [ -n "${version}" ]; then
         printf " v%d" ${version}
