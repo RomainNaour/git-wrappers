@@ -14,13 +14,13 @@ D_HELP=2
 D_EXTRA=3
 D_ESC=255
 
-OPT_STR=':hrmp:s:R:M:P:'
+OPT_STR=':hrmp:s:w:R:M:P:'
 
 #----------------------------------------------------------------------------
 main() {
     local OPT OPTARG OPTIND
     local gbranch gdir pwcache master_ok pw_prj
-    local id _ subject ret tmpf date maxage age state
+    local id _ subject ret tmpf date maxage age state who
     local -a ids subjects selected pw_opts d_opts
     local has_git_config git_maxage git_master_ok git_pw_project
 
@@ -53,6 +53,7 @@ main() {
     : ${master_ok:=false}
     : ${pw_prj:=$( git config --file ~/.pwclientrc options.default 2>/dev/null || true )}
     state="New"
+    who=""
 
     unset OPTIND
     while getopts "${OPT_STR}" OPT; do
@@ -61,6 +62,7 @@ main() {
         (m)     master_ok="true";;
         (p)     pw_prj="${OPTARG}";;
         (s)     state="${OPTARG}";;
+        (w)     who="${OPTARG}";;
         (R)     git_maxage="${OPTARG}"; has_git_config=1;;
         (M)     git_master_ok="${OPTARG}"; has_git_config=1;;
         (P)     git_pw_project="${OPTARG}"; has_git_config=1;;
@@ -107,6 +109,10 @@ main() {
     # let pwclient handle that on its own.
     if [ "${state,,}" != "all" ]; then
         pw_opts=( -s "${state}" )
+    fi
+    # Ditto the author
+    if [ -n "${who}" ]; then
+        pw_opts+=( -w "${who}" )
     fi
 
     # Check whether the cached data is too old
