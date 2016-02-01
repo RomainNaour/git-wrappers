@@ -117,7 +117,8 @@ main() {
     age=$((date-$( stat -c '%Y' "${pwcache}" )))
     if [ ${age} -ge ${maxage} ]; then
         trace "Patchwork cache too cold, retrieving patch list for %s..." "${pw_prj}"
-        pwclient list -p "${pw_prj}" "${pw_opts[@]}" |tail -n +3 >"${pwcache}"
+        pwclient list -p "${pw_prj}" "${pw_opts[@]}" \
+        |awk '$(1) ~ /^[[:digit:]]+$/' >"${pwcache}"
         printf " done\n"
     fi
 
