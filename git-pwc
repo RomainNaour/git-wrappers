@@ -216,6 +216,12 @@ help() {
 	        -p PRJ
 	            Get patch list from Patchwork project PRJ.
 
+	        -s STATE
+	            Filter on STATE of the patch (see: pwclient states)
+
+	        -w AUTHOR
+	            Filter on AUTHOR of the patch
+
 	        -R MAXAGE
 	            Set the maximum age (in seconds) of the local cache before it is
 	            refreshed.
