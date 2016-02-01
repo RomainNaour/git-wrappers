@@ -62,7 +62,7 @@ main() {
         (p)     pw_prj="${OPTARG}";;
         (s)     state="${OPTARG}";;
         (R)     git_maxage="${OPTARG}"; has_git_config=1;;
-        (M)     git_mastrer_ok="${OPTARG}"; has_git_config=1;;
+        (M)     git_master_ok="${OPTARG}"; has_git_config=1;;
         (P)     git_pw_project="${OPTARG}"; has_git_config=1;;
         # Note: we can't have -h here, it has been handled above.
         # Similarly, incorrect options have already been dealt with.
