@@ -10,7 +10,7 @@ new git commands.
 
 A new "model" of branching is introduced with those scripts:
 
-  - for every branch, a tag is created at the branch-point
+  - for each branch, a tag is created at the branch-point
 
   - the tag is named after the branch (with a prefix to avoid
     naming ambiguity)
@@ -25,9 +25,9 @@ Here are the scripts that will deal with such branches:
         create a branch BRANCH and the corresponding start-tag
 
     git-branches
-        list all managed branches and the number of commits since
-        their start-tag in each of them, plus a total of all commits
-        on all such branches
+        list all such branches and the number of commits since their
+        start-tag in each of them, plus a total of all commits on all
+        such branches
 
     git-blog
         git-log such a branch, from its start-tag to its HEAD
@@ -53,8 +53,10 @@ single commit, which is the merge of one or more other branches.
 
 A merge-branch is a branch with a start-tag, like above.
 
+There's a single script that handles merge-branches:
+
     git-remerge-and-retag NEW_START BRANCH [additional branches]
-        remerge the branch BRANCh (and any additional branches) on top
+        remerge the branch BRANCH (and any additional branches) on top
         of NEW_START, and tag NEW_START as the new start-tag of the
         branch
 
@@ -62,13 +64,13 @@ A merge-branch is a branch with a start-tag, like above.
 ================================================================================
 3) bulk rebasing/remerging
 
-Busy devloppers may have a lot of local branches, that they may wish to
+Busy developpers may have a lot of local branches, that they may wish to
 rebase all on top of a common cset (i.e. to rebase after a new release
-was made, or to follow the maste rbranch aggressively...)
+was made, or to follow the master branch aggressively...)
 
-    git-rebase-all NEW_STAR PATTERN
+    git-rebase-all NEW_START PATTERN
         calls either git-rebase-and-retag or git-remerge-and-retag on
-        branches that match the regexp PATTERN.
+        branches that match the regexp PATTERN, and rebase them on NEW_START
 
 
 ================================================================================
@@ -96,11 +98,11 @@ list.
     git-send-pull-request BASE REMOTE HEAD [options]
         prepare a cover-letter with the content of git-request-pull, and
         prepare the patches for BASE..HEAD. Open an editor to complete the
-        cover-letter. Send the cover-letter with all pathces as replies to
+        cover-letter. Send the cover-letter with all patches as replies to
         the cover-letter.
 
         git-send-pull-request is quite versatile: it can instruct patchwork
-        to ignore the cover-letter and.or the patches, add recipients (To:,
+        to ignore the cover-letter and/or the patches, add recipients (To:,
         Cc: or Bcc:), handles series versions, send patches or not, append
         a suffix as in [PATCH vN/M SUFFIX]... Use '-h' to see help.
 
