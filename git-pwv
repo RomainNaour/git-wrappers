@@ -8,6 +8,7 @@ mail_to_commit() {
 BEGIN {
     in_header = 1;
     in_body = 0;
+    in_commit_log = 0;
     in_patch = 0;
 }
 
@@ -38,20 +39,25 @@ in_header==1 && $(1)=="Message-Id:" {
     cset = substr( $(0), 14, 40 );
 }
 
-in_body==1 && $(0)=="---" {
+( in_body==1 || in_commit_log == 1 ) && $(0)~/^ [^[:space:]]+ +\| +[[:digit:]]+ (\+|-)/ {
     in_body = 0;
+    in_commit_log= 0 ;
     in_patch = 1;
-    printf( "\n" );
+    printf( "---\n%s\n", $(0) );
     next;
 }
 
+in_body==1 && $(0)=="---" {
+    in_body=0;
+    in_commit_log = 1;
+}
+
 in_body==1 {
-    printf( "    " );
-    print;
+    printf( "    %s\n", $(0) );
 }
 
 in_patch==1 {
-    print;
+    printf( "%s\n", $(0) );
 }
 '
 }
