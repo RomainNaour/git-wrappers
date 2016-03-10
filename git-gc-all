@@ -48,7 +48,7 @@ do_git_gc() {
     printf "%s: running git gc\n" "${dir}"
 
     old_size=$( _du )
-    nice -n 19 git gc "${@}"
+    nice -n 19 git gc --prune "${@}"
     new_size=$( _du )
 
     if [ ${new_size} -le ${old_size} ]; then
