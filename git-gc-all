@@ -17,6 +17,13 @@ main() {
         printf "%s: no directory specified\n" "${myname}" >&2
         exit 1
     fi
+    if [ ! -d "${base_dir}" ]; then
+        printf "%s: %s is not a directory (or symlink to a directory)\n" \
+               "${myname}" "${base_dir}" >&2
+        exit 1
+    fi
+
+    base_dir="$( cd "${base_dir}"; pwd )/"
 
     before=$( du -s "${base_dir}" |awk '{ print $1 }' )
 
