@@ -39,8 +39,23 @@ do_error() {
     exit 1
 }
 
+do_git() { git "${@}"; }
+do_git_debug() { :; }
 debug() { :; }
+
 if [ -n "${GIT_DEBUG}" ]; then
+    do_git() {
+        do_git_debug "${@}"
+        git "${@}"
+    }
+
+    do_git_debug() {
+        debug "running git (%s) with args:\n" "$(which git 2>/dev/null)"
+        for i in "${@}"; do
+            debug "    '%s'\n" "${i}"
+        done
+    }
+
     debug() {
         local fmt="${1}"
         shift
@@ -148,7 +163,7 @@ shift 2
 case "${1}" in
     --*)
         debug "Looking for current local branch (end not given)\n"
-        end="$( LANG= LC_ALL=C git branch                        \
+        end="$( LANG= LC_ALL=C do_git branch                        \
                 |sed -r -e '/^\*[[:space:]](.+)$/!d; s//\1/g;'   \
                         -e '/^\(no branch\)$/d'
               )"
@@ -264,13 +279,13 @@ if [ ${no_pw} -eq 1 ]; then
 fi
 
 debug "Checking if start '%s' is valid\n" "${start}"
-if ! git rev-parse --verify "${start}" >/dev/null 2>&1; then
+if ! do_git rev-parse --verify "${start}" >/dev/null 2>&1; then
     do_error "start '%s' is not valid\n" "${start}"
     exit 1
 fi
 
 debug "Checking if end '%s' is valid\n" "${end:-(empty)}"
-if [ -z "${end}" ] || ! git rev-parse --verify "${end}" >/dev/null 2>&1; then
+if [ -z "${end}" ] || ! do_git rev-parse --verify "${end}" >/dev/null 2>&1; then
     do_error "unknown branch '%s', or not on a branch\n" "${end:-(empty)}"
 fi
 if [ "${end}" = "master" ]; then
@@ -285,7 +300,7 @@ case "${url}" in
     *)  # Check if this is the name of a remote
         debug "\`--> It is not; maybe it's a remote name\n"
         debug "Checking if remote '%s' is valid\n" "${url}"
-        url2="$( git remote show "${url}" 2>/dev/null                    \
+        url2="$( do_git remote show "${url}" 2>/dev/null                    \
                  |sed -r -e '/^[[:space:]]*Fetch URL: (.+)$/!d; s//\1/;' \
                  || true                                                 \
                )"
@@ -303,18 +318,18 @@ case "${url}" in
 esac
 
 debug "Checking if url '%s' is reachable\n" "${url}"
-if ! git ls-remote --heads "${url}" >/dev/null 2>/dev/null; then
+if ! do_git ls-remote --heads "${url}" >/dev/null 2>/dev/null; then
     do_error "'%s': non-existing or unreachable repository\n" "${url}"
 fi
 
 debug "Checking if end '%s' exists on url '%s'\n" "${end}" "${url}"
-remote_test="$( git ls-remote --heads "${url}" "${end}" 2>/dev/null )"
+remote_test="$( do_git ls-remote --heads "${url}" "${end}" 2>/dev/null )"
 if [ -z "${remote_test}" ]; then
     do_error "'%s': no such branch on '%s'\n" "${end}" "${url}"
 fi
 
 debug "Checking if remote '%s' is the same as local '%s'\n" "${end}" "${end}"
-local_hash="$( git log -n 1 --pretty=tformat:%H "${end}" )"
+local_hash="$( do_git log -n 1 --pretty=tformat:%H "${end}" )"
 remote_hash="$( sed -r -e 's/[[:space:]].+//;' <<<"${remote_test}" )"
 if [ "${local_hash}" != "${remote_hash}" ]; then
     do_error "'%s': remote hash %7.7s, local hash %7.7s\n" \
@@ -341,7 +356,7 @@ tmp_dir="$( mktemp -d "${TMPDIR:-/tmp}/git-send-pull-request.XXXXXX" )"
 patches_dir="${tmp_dir}/patches"
 
 debug "Generating path series '%s..%s'\n" "${start}" "${end}"
-git format-patch -M -n --cover-letter --thread              \
+do_git format-patch -M -n --cover-letter --thread              \
                  -o "${patches_dir}" "${start}..${end}"     >/dev/null
 
 if [ -n "${version}" ]; then
@@ -366,7 +381,7 @@ fi
     if [ ${is_pull} -eq 1 ]; then
         printf "pull request"
     else
-        nb_patches=$( git log --oneline "${start}..${end}" |wc -l )
+        nb_patches=$( do_git log --oneline "${start}..${end}" |wc -l )
         printf "PATCH %0*d/%d" ${#nb_patches} 0 ${nb_patches}
     fi
     if [ -n "${version}" ]; then
@@ -381,11 +396,11 @@ fi
     fi
     printf "\n"
 
-    user_name="$( git config --get user.name )"
+    user_name="$( do_git config --get user.name )"
     printf "Regards,\n%s.\n\n\n" "${user_name}"
 
     debug "Generating initial request-pull content\n"
-    git request-pull "${start}" "${url}" "${end}"
+    do_git request-pull "${start}" "${url}" "${end}"
 
     printf "\n%s \n" "--"
     if [ -f "${HOME}/.signature" ]; then
@@ -443,17 +458,16 @@ if [    -s "${patches_dir}/0000-cover-letter"   \
     done
 
     debug "Asking smtp password\n"
-    smpt_server="$( git config --get sendemail.smtpserver )"
+    smpt_server="$( do_git config --get sendemail.smtpserver )"
     read -s -p "SMTP password ${smpt_server}: " smtppass
     printf "\n" # 'read -s' does not echo the \n at the end
                 # of the prompt, so we need to do it ourselves.
     args_se+=( --smtp-pass="${smtppass}" )
 
     debug "Sending pull-request cover-letter:\n"
-    for i in git send-email "${args_se[@]}" "${args_se_cover[@]}" "${patches_dir}/0000-cover-letter"; do
-        debug "  - '%s'\n" "${i}"
-    done
+    do_git_debug send-email "${args_se[@]}" "${args_se_cover[@]}" "${patches_dir}/0000-cover-letter"
     if [ ${dry_run} -eq 0 ]; then
+        # Call the real git here, we already debugged it just above
         git send-email "${args_se[@]}" "${args_se_cover[@]}" "${patches_dir}/0000-cover-letter"
     fi
     ret=${?}
@@ -465,10 +479,9 @@ if [    -s "${patches_dir}/0000-cover-letter"   \
         # the patches.
         sleep 1
         debug "Sending patch series as reply to pull-request:\n"
-        for i in git send-email --no-thread "${args_se[@]}" "${patches_dir}/"*.patch; do
-            debug "  - '%s'\n" "${i}"
-        done
+        do_git_debug send-email --no-thread "${args_se[@]}" "${patches_dir}/"*.patch
         if [ ${dry_run} -eq 0 ]; then
+            # Call the real git here, we already debugged it just above
             git send-email --no-thread "${args_se[@]}" "${patches_dir}/"*.patch
         else
             (exit 42) # For keep temporary directory and files
