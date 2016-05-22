@@ -400,7 +400,16 @@ fi
     printf "Regards,\n%s.\n\n\n" "${user_name}"
 
     debug "Generating initial request-pull content\n"
-    do_git request-pull "${start}" "${url}" "${end}"
+    # We can't use git-request-pull, it does not like tags and branches
+    # that have a slash '/' in their name.
+    printf "The following changes since commit "
+    do_git show --no-patch --pretty=tformat:'%H%n%n  %s (%ci)%n%n' "${start}^{commit}"
+    printf "are available in the git repository at:\n\n  %s\n\n" "${url}"
+    printf "for you to fetch changes up to "
+    do_git show --no-patch --pretty=tformat:'%H%n%n  %s (%ci)%n%n' "${end}^{commit}"
+    printf -- "----------------------------------------------------------------\n"
+    git shortlog "${start}..${end}"
+    git diff --stat --summary "${start}..${end}"
 
     printf "\n%s \n" "--"
     if [ -f "${HOME}/.signature" ]; then
