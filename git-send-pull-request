@@ -39,6 +39,14 @@ do_error() {
     exit 1
 }
 
+do_warn() {
+    local fmt="${1}"
+    shift
+
+    printf "%s: " "${myname}"
+    printf "${fmt}" "${@}"
+}
+
 do_git() { git "${@}"; }
 do_git_debug() { :; }
 debug() { :; }
@@ -112,13 +120,17 @@ do_help() {
 		
 		    --cover-cc-all
 		                Add CC recipients to cover letter from the SoB-lines
-	                    of individual patches.
+		                of individual patches.
 		                Usefull to keep patches recipients aware of the
 		                cover-letter, without sending them all the patches.
 		
 		    --dry-run
 		                Do not actually send the mails and keep the temporary
 		                directory for later manual inspection (to debug).
+		
+		    --force
+		                Send even if remote does not appear to have to correct
+		                hash (e.g. if it is an http server that does caching).
 		
 		Options can also be any option valid for 'git send-email', for
 		example: --to, --cc, --bcc. Do not specify --compose, it is
@@ -190,10 +202,14 @@ version=
 cover_cc_all=0
 is_pull=1
 dry_run=0
+force=0
 while [ ${#} -ne 0 ]; do
     case "${1}" in
         --dry-run)
             dry_run=1
+            ;;
+        --force)
+            force=1
             ;;
         --series)
             no_series=0
@@ -265,6 +281,10 @@ while [ ${#} -ne 0 ]; do
     shift
 done
 
+if [ ${force} -eq 1 -a ${dry_run} -eq 1 ]; then
+    do_error "Can't use --force and --dry-run together\n"
+fi
+
 debug "Checking if we have arguments for send-email\n"
 if [ ${#args_se[@]} -lt 2 ]; then
     do_error "not enough arguments left for send-email\n"
@@ -332,8 +352,13 @@ debug "Checking if remote '%s' is the same as local '%s'\n" "${end}" "${end}"
 local_hash="$( do_git log -n 1 --pretty=tformat:%H "${end}" )"
 remote_hash="$( sed -r -e 's/[[:space:]].+//;' <<<"${remote_test}" )"
 if [ "${local_hash}" != "${remote_hash}" ]; then
-    do_error "'%s': remote hash %7.7s, local hash %7.7s\n" \
-             "${end}" "${remote_hash}" "${local_hash}"
+    if [ ${force} -eq 0 ]; then
+        do_error "'%s': remote hash %7.7s, local hash %7.7s\n" \
+                 "${end}" "${remote_hash}" "${local_hash}"
+    else
+        do_warn "'%s': remote hash %7.7s, local hash %7.7s\n" \
+                "${end}" "${remote_hash}" "${local_hash}"
+    fi
 fi
 
 # Check we have a proper subject for the cover-letter
